@@ -53,13 +53,14 @@ musicToggle.addEventListener('click', async () => {
 
     if (musicToggle.classList.contains('active')) {
         try {
-            bgm.volume = 0.3;
+            bgm.volume = 0.2;
             await bgm.play();
         } catch (error) {
             console.warn('Audio play failed:', error);
         }
     } else {
         bgm.pause();
+        bgm.currentTime = 0;
     }
 });
 
