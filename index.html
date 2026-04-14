@@ -1,82 +1,91 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flower in Pieces</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower in Pieces</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 예전처럼 HTML에서 직접 MediaPipe 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <!-- 음악 토글 -->
-  <div class="music-toggle" id="musicToggle" aria-label="Toggle sound">
-    <div class="music-circle"></div>
-  </div>
 
-  <!-- 나중에 음악 넣을 때 source 추가 -->
-  <audio id="bgm" loop></audio>
-
-  <!-- 화살표 -->
-  <button class="side-menu-left arrow-btn" id="leftArrow" aria-label="Previous screen">
-    <div class="chevron left"></div>
-  </button>
-
-  <button class="side-menu-right arrow-btn" id="rightArrow" aria-label="Next screen">
-    <div class="chevron right"></div>
-  </button>
-
-  <!-- 꽃 위 텍스트 -->
-  <div class="top-title">Pua Aloalo</div>
-
-  <div class="stage">
-    <div class="screen screen1 active">
-      <div class="flower-container">
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-      </div>
+    <!-- 음악 토글 -->
+    <div class="music-toggle" id="musicToggle">
+        <div class="music-circle"></div>
     </div>
 
-    <div class="screen screen2">
-      <div class="flower-container">
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-      </div>
+    <audio id="bgm" loop>
+        <!-- 나중에 음악 넣을 때 source 추가 -->
+    </audio>
+
+    <!-- 화살표 -->
+    <button class="side-menu-left arrow-btn" id="leftArrow" aria-label="이전 페이지">
+        <div class="chevron left"></div>
+    </button>
+
+    <button class="side-menu-right arrow-btn" id="rightArrow" aria-label="다음 페이지">
+        <div class="chevron right"></div>
+    </button>
+
+    <!-- 상단 텍스트 -->
+    <div class="top-title">Pua Aloalo</div>
+
+    <!-- 화면 -->
+    <div class="stage">
+        <div class="screen screen1 active">
+            <div class="flower-container">
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+        </div>
+
+        <div class="screen screen2">
+            <div class="flower-container">
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+        </div>
+
+        <div class="screen screen3">
+            <div class="flower-container">
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+        </div>
+
+        <div class="screen screen4">
+            <div class="flower-container">
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+        </div>
+
+        <div class="screen screen5">
+            <div class="flower-container">
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="screen screen3">
-      <div class="flower-container">
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-      </div>
+    <!-- 하단 텍스트 -->
+    <div class="footer-info">
+        <div class="piece-number" id="piece">PIECE 1</div>
+        <div class="flower-name" id="flowerName">Maʻo hau hele (Hibiscus brackenridgei)</div>
     </div>
 
-    <div class="screen screen4">
-      <div class="flower-container">
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-      </div>
+    <!-- 오른쪽 하단 카메라 -->
+    <div class="camera-wrap">
+        <div class="camera-label">HAND CAMERA</div>
+        <video class="input_video" id="webcam" playsinline></video>
+        <canvas class="output_canvas" id="outputCanvas"></canvas>
+        <div class="camera-status" id="cameraStatus">camera loading...</div>
     </div>
 
-    <div class="screen screen5">
-      <div class="flower-container">
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-info">
-    <div class="piece-number" id="piece">PIECE 1</div>
-    <div class="flower-name" id="flowerName">Maʻo hau hele (Hibiscus brackenridgei)</div>
-  </div>
-
-  <!-- 오른쪽 하단 카메라 -->
-  <div class="camera-wrap">
-    <div class="camera-label">HAND CAMERA</div>
-    <video id="webcam" class="camera-video" autoplay playsinline muted></video>
-    <canvas id="outputCanvas" class="camera-canvas"></canvas>
-    <div class="camera-status" id="cameraStatus">camera idle</div>
-  </div>
-
-  <script type="module" src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
