@@ -1,0 +1,267 @@
+:root {
+  --bg-color: #8DD0C0;
+  --text-color: #EDCDD2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+}
+
+/* 음악 토글 */
+.music-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 70px;
+  height: 36px;
+  border-radius: 999px;
+  border: 3px solid var(--text-color);
+  background: transparent;
+  cursor: pointer;
+  z-index: 1000;
+  user-select: none;
+}
+
+.music-circle {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--text-color);
+  background: transparent;
+  transition: transform 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+}
+
+.music-toggle.active {
+  background: var(--text-color);
+}
+
+.music-toggle.active .music-circle {
+  transform: translateX(34px);
+  background: var(--bg-color);
+  border-color: var(--bg-color);
+}
+
+/* 화살표 */
+.arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.75;
+  z-index: 999;
+  user-select: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.arrow-btn:hover {
+  opacity: 1;
+}
+
+.side-menu-left {
+  left: 20px;
+}
+
+.side-menu-right {
+  right: 20px;
+}
+
+.chevron {
+  width: 34px;
+  height: 34px;
+  border-top: 5px solid var(--text-color);
+  border-right: 5px solid var(--text-color);
+  border-top-right-radius: 10px;
+}
+
+.left {
+  transform: rotate(-135deg);
+}
+
+.right {
+  transform: rotate(45deg);
+}
+
+/* 상단 텍스트 */
+.top-title {
+  position: absolute;
+  top: 88px;
+  width: 100%;
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  z-index: 20;
+}
+
+/* 화면 */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 꽃 */
+.flower-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+.petal {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform-origin: bottom center;
+  opacity: 0.8;
+}
+
+/* 하단 텍스트 */
+.footer-info {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+}
+
+.piece-number {
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.flower-name {
+  font-size: 48px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* 꽃 스타일 */
+.screen1 .petal {
+  width: 100px;
+  height: 150px;
+  background: #EDCDD2;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.screen2 .petal {
+  width: 60px;
+  height: 180px;
+  background: #F5A9B8;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.screen3 .petal {
+  width: 120px;
+  height: 120px;
+  background: #FFD6A5;
+  border-radius: 60% 60% 50% 50%;
+}
+
+.screen4 .petal {
+  width: 90px;
+  height: 160px;
+  background: #CDB4DB;
+  clip-path: polygon(50% 0%, 70% 50%, 100% 100%, 0% 100%, 30% 50%);
+}
+
+.screen5 .petal {
+  width: 130px;
+  height: 100px;
+  background: #BDE0FE;
+  border-radius: 40%;
+}
+
+/* 카메라 */
+.camera-wrap {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 260px;
+  height: 195px;
+  border: 2px solid rgba(237, 205, 210, 0.8);
+  border-radius: 18px;
+  overflow: hidden;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.camera-video,
+.camera-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-video {
+  transform: scaleX(-1);
+}
+
+.camera-canvas {
+  pointer-events: none;
+}
+
+.camera-label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.camera-status {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  font-size: 11px;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 4px 8px;
+  border-radius: 999px;
+  max-width: calc(100% - 24px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
