@@ -49,16 +49,20 @@ rightArrow.addEventListener('click', () => {
 });
 
 musicToggle.addEventListener('click', async () => {
-    musicToggle.classList.toggle('active');
+    const isActive = musicToggle.classList.contains('active');
 
-    if (musicToggle.classList.contains('active')) {
+    if (!isActive) {
+        musicToggle.classList.add('active');
+
         try {
             bgm.volume = 0.2;
             await bgm.play();
         } catch (error) {
             console.warn('Audio play failed:', error);
+            musicToggle.classList.remove('active');
         }
     } else {
+        musicToggle.classList.remove('active');
         bgm.pause();
         bgm.currentTime = 0;
     }
