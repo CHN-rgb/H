@@ -1,3 +1,6 @@
+
+
+
 :root {
     --bg-color: #8DD0C0;
     --text-color: #EDCDD2;
@@ -146,9 +149,34 @@ html, body {
 .petal {
     position: absolute;
     left: 50%;
-    top: 0;
+    top: 10px;
+    width: 115px;
+    height: 165px;
     transform-origin: bottom center;
     opacity: 0.8;
+    border-radius: 58% 58% 42% 42%;
+    clip-path: ellipse(42% 50% at 50% 50%);
+}
+
+/* 꽃 스타일: 모양은 통일, 색만 변경 */
+.screen1 .petal {
+    background: #EDCDD2;
+}
+
+.screen2 .petal {
+    background: #F5A9B8;
+}
+
+.screen3 .petal {
+    background: #FFD6A5;
+}
+
+.screen4 .petal {
+    background: #CDB4DB;
+}
+
+.screen5 .petal {
+    background: #BDE0FE;
 }
 
 /* 꽃 스타일 */
