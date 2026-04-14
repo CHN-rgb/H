@@ -27,6 +27,15 @@ function updateScreen() {
     });
     piece.textContent = `PIECE ${current + 1}`;
     flowerName.textContent = names[current];
+    updateFlower();
+}
+
+function updateFlower() {
+    const activePetals = screens[current].querySelectorAll('.petal');
+
+    activePetals.forEach((petal, index) => {
+        petal.style.transform = `translateX(-50%) rotate(${index * 45}deg)`;
+    });
 }
 
 leftArrow.addEventListener('click', () => {
