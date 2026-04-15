@@ -1,3 +1,9 @@
+const infoOverlay = document.getElementById('infoOverlay');
+const infoTitle = document.getElementById('infoTitle');
+const infoContent = document.getElementById('infoContent');
+const infoClose = document.getElementById('infoClose');
+const infoBtn = document.getElementById('howToOpen'); // 기존 버튼
+
 const screens = document.querySelectorAll('.screen');
 const piece = document.getElementById('piece');
 const flowerName = document.getElementById('flowerName');
