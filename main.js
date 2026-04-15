@@ -3,6 +3,40 @@ const infoTitle = document.getElementById('infoTitle');
 const infoContent = document.getElementById('infoContent');
 const infoClose = document.getElementById('infoClose');
 const infoBtn = document.getElementById('howToOpen'); // 기존 버튼
+const infoData = [
+    {
+        title: "Maʻo hau hele",
+        content: "하와이를 대표하는 노란 히비스커스. 하와이 주화로 지정된 꽃이며 따뜻한 햇빛 아래에서 자랍니다."
+    },
+    {
+        title: "Kokiʻo keʻokeʻo",
+        content: "하얀색 꽃잎을 가진 희귀한 히비스커스. 고요하고 순수한 분위기를 상징합니다."
+    },
+    {
+        title: "Kokiʻo keʻokeʻo (Waimeae)",
+        content: "와이메아 지역에서 발견되는 변종으로 자연 보호 대상 식물입니다."
+    },
+    {
+        title: "Clay's Hibiscus",
+        content: "하와이 고유종으로 붉은빛 꽃잎이 특징이며 멸종 위기 식물로 분류됩니다."
+    },
+    {
+        title: "Kokiʻo ʻula",
+        content: "짙은 붉은색 꽃을 가진 종으로 강렬한 생명력을 상징합니다."
+    }
+];
+infoBtn.addEventListener('click', () => {
+    const data = infoData[current];
+
+    infoTitle.textContent = data.title;
+    infoContent.textContent = data.content;
+
+    infoOverlay.classList.add('show');
+});
+
+infoClose.addEventListener('click', () => {
+    infoOverlay.classList.remove('show');
+});
 
 const screens = document.querySelectorAll('.screen');
 const piece = document.getElementById('piece');
