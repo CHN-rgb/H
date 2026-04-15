@@ -294,7 +294,7 @@ html, body {
     text-overflow: ellipsis;
 }
 
-.howto-btn {
+.Info-btn {
     position: absolute;
     top: 150px; /* Pua Aloalo 바로 아래 */
     left: 50%;
