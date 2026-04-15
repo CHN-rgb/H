@@ -21,10 +21,10 @@ const names = [
 
 let current = 0;
 
-/* 꽃 상태값 */
-let bloomValue = 0.5;      // 0 ~ 1
-let rotateYValue = 0;      // -55 ~ 55 (좌우 3D 회전)
-let tiltXValue = -8;       // 살짝 위에서 보는 느낌 유지
+/* 꽃 상태 */
+let bloomValue = 0.5;   // 0 ~ 1
+let rotateYValue = 0;   // -55 ~ 55
+let tiltXValue = -8;
 
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -52,7 +52,6 @@ function updateFlower() {
     const activeFlower = screens[current].querySelector('.flower-container');
     const activePetals = screens[current].querySelectorAll('.petal');
 
-    /* 핵심: 평면 회전이 아니라 3D 회전 */
     activeFlower.style.transform = `
         rotateX(${tiltXValue}deg)
         rotateY(${rotateYValue}deg)
@@ -61,7 +60,7 @@ function updateFlower() {
     activePetals.forEach((petal, index) => {
         const angle = index * 45;
 
-        /* 0 = 닫힘, 1 = 활짝 핌 */
+        /* 0 = 닫힘 / 1 = 핌 */
         const spreadY = 2 + bloomValue * 28;
         const openAngle = 2 + bloomValue * 62;
         const scaleX = 0.62 + bloomValue * 0.48;
@@ -112,17 +111,16 @@ updateScreen();
    손 인식 + 꽃 연결
 ------------------------- */
 
-/* 셀피 카메라 기준 좌우 보정 */
+/* 셀피 카메라 좌우 보정 */
 function toUserHandLabel(mediapipeLabel) {
     if (mediapipeLabel === 'Left') return 'Right';
     if (mediapipeLabel === 'Right') return 'Left';
     return mediapipeLabel;
 }
 
-/* 손이 얼마나 벌어졌는지 계산: 0 = 오므림, 1 = 펼침 */
+/* 손 펼침 정도: 0 = 오므림, 1 = 펼침 */
 function getHandOpenAmount(landmarks) {
     const wrist = landmarks[0];
-
     const tipIds = [8, 12, 16, 20];
     const baseIds = [5, 9, 13, 17];
 
@@ -134,16 +132,13 @@ function getHandOpenAmount(landmarks) {
         total += distance(tip, wrist) - distance(base, wrist);
     }
 
-    /* 엄지는 검지와의 벌어짐으로 추가 반영 */
-    const thumbTip = landmarks[4];
-    const indexTip = landmarks[8];
-    total += distance(thumbTip, indexTip) * 0.7;
+    /* 엄지는 검지와의 거리로 추가 */
+    total += distance(landmarks[4], landmarks[8]) * 0.7;
 
-    /* 손가락이 벌어질수록 값이 커지게 */
     return clamp((total - 0.10) / 0.38, 0, 1);
 }
 
-/* 손바닥이 카메라를 향하는지 */
+/* 오른손: 손바닥이 카메라를 향하는지 */
 function isPalmFacingCamera(landmarks) {
     const palmZ =
         (landmarks[0].z + landmarks[5].z + landmarks[9].z + landmarks[13].z + landmarks[17].z) / 5;
@@ -154,13 +149,14 @@ function isPalmFacingCamera(landmarks) {
     return tipZ < palmZ + 0.03;
 }
 
-/* 왼손: 펴진 손바닥이면 회전 제스처로 인정 */
-function isOpenPalmGesture(landmarks) {
-    return getHandOpenAmount(landmarks) > 0.45;
+/* 왼손: 주먹 판정 */
+function isFistGesture(landmarks) {
+    const openAmount = getHandOpenAmount(landmarks);
+    return openAmount < 0.28;
 }
 
-/* 왼손 x 위치를 3D 좌우 회전으로 변환 */
-function getRotateYFromPalmX(landmarks) {
+/* 왼손 주먹의 x 위치로 3D 회전 */
+function getRotateYFromFistX(landmarks) {
     const wrist = landmarks[0];
     return clamp((wrist.x - 0.5) * 110, -55, 55);
 }
@@ -205,28 +201,27 @@ function onResults(results) {
             );
 
             /* 오른손 = 개화
-               손가락 벌어질수록 userRightBloom 값이 커짐 */
+               손가락 벌어질수록 값 커짐 */
             if (userLabel === 'Right') {
                 if (isPalmFacingCamera(landmarks)) {
                     userRightBloom = getHandOpenAmount(landmarks);
                 }
             }
 
-            /* 왼손 = 3D 좌우 회전 */
+            /* 왼손 = 주먹 쥐고 좌우 이동 */
             if (userLabel === 'Left') {
-                if (isOpenPalmGesture(landmarks)) {
-                    userLeftRotateY = getRotateYFromPalmX(landmarks);
+                if (isFistGesture(landmarks)) {
+                    userLeftRotateY = getRotateYFromFistX(landmarks);
                 }
             }
         });
 
         if (userRightBloom !== null) {
-            /* 벌어질수록 bloomValue 증가 */
-            bloomValue = lerp(bloomValue, userRightBloom, 0.22);
+            bloomValue = lerp(bloomValue, userRightBloom, 0.25);
         }
 
         if (userLeftRotateY !== null) {
-            rotateYValue = lerp(rotateYValue, userLeftRotateY, 0.18);
+            rotateYValue = lerp(rotateYValue, userLeftRotateY, 0.20);
         }
 
         updateFlower();
